@@ -1,0 +1,684 @@
+#:import Factory kivy.factory.Factory
+
+# definition for dropdown option of colors as well as option to remove the widget
+<ColorMenu>:
+    size_hint_y: None
+    Button:
+        size_hint_y: None
+        size: 20, 20
+        text: "X"
+        color: 1, 1, 1, 1
+        background_normal: ''
+        background_color: 255, 0, 0, 1
+        on_release: root.remove_widget()
+        on_release: root.dismiss()
+    Button:
+        size_hint_y: None
+        height: 20
+        background_normal: ''
+        background_color: 0.8, 0.5, 0, 1
+        on_release: root.change_color((0.8, 0.5, 0, 1))
+        on_release: root.dismiss()
+    Button:
+        size_hint_y: None
+        height: 20
+        background_normal: ''
+        background_color: 0,0,0.8,1
+        on_release: root.change_color((0, 0, 0.8, 1))
+        on_release: root.dismiss()
+    Button:
+        size_hint_y: None
+        height: 20
+        background_normal: ''
+        background_color: 0,0.3,0.6,1
+        on_release: root.change_color((0,0.3,0.6,1))
+        on_release: root.dismiss()
+    Button:
+        size_hint_y: None
+        height: 20
+        background_normal: ''
+        background_color: 0.8,0,0,1
+        on_release: root.change_color((0.8, 0, 0, 1))
+        on_release: root.dismiss()
+    Button:
+        size_hint_y: None
+        height: 20
+        background_normal: ''
+        background_color: 0,0.8,0,1
+        on_release: root.change_color((0, 0.8, 0, 1))
+        on_release: root.dismiss()
+    Button:
+        size_hint_y: None
+        height: 20
+        background_normal: ''
+        background_color: 0,0.5,0.5,1
+        on_release: root.change_color((0, 0.8, 0.5, 1))
+        on_release: root.dismiss()
+    Button:
+        size_hint_y: None
+        height: 20
+        background_normal: ''
+        background_color: 1, 1, 0, 1
+        on_release: root.change_color((1, 1, 0, 1))
+        on_release: root.dismiss()
+    Button:
+        size_hint_y: None
+        height: 20
+        background_normal: ''
+        background_color: 1,0,1,1
+        on_release: root.change_color((1,0,1,1))
+        on_release: root.dismiss()
+    Button:
+        size_hint_y: None
+        height: 20
+        background_normal: ''
+        background_color: 1,0.75,0.79,1
+        on_release: root.change_color((1,0.75,0.79,1))
+        on_release: root.dismiss()
+    Button:
+        size_hint_y: None
+        height: 20
+        background_normal: ''
+        background_color: 0.5,0,0.5,1
+        on_release: root.change_color(( 0.5,0,0.5,1))
+        on_release: root.dismiss()
+
+# definition for each legend item widget
+<LegendItemWidget>:
+    id: legend_item
+    size_hint_y: None
+    height: 40
+    GridLayout:
+        height: root.height
+        width: root.width
+        pos: root.pos
+        cols: 2
+        rows: 1
+        TextInput:
+            size_hint_x: 0.8
+            multiline: False
+            size: root.width, 40
+        GridLayout:
+            rows: 1
+            cols: 1
+            size_hint_x: 0.2
+            Button:
+                id: choose_color_btn
+                size: 20, 20
+                background_normal: ''
+                background_color: root.legend_color
+                on_release: Factory.ColorMenu(self)
+
+# definition for the whole legend section that contains all legend items
+<LegendWidget>:
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        GridLayout:
+            id: legend_item_layout
+            cols: 1
+            rows: 0
+            height: self.minimum_height
+        Button:
+            id: add_legend
+            text: "Add legend"
+            size_hint_y: 0.1
+            on_press: root.add_legend()
+        Button:
+            id: save
+            text: "Save"
+            size_hint_y: 0.1
+            on_press: root.save_schedule()
+
+# definition for the entire calendar app that contains a legend section and grid-like sections for all days
+# in a week
+<CalendarWidget>:
+    orientation: 'horizontal'
+    size: root.size
+    id: app_screen
+    LegendWidget:
+
+    HourLines:
+        size_hint_x: 0.3
+    RelativeLayout:
+        TimeLines:
+            day_text: "Monday"
+    RelativeLayout:
+        TimeLines:
+            day_text: "Tuesday"
+    RelativeLayout:
+        TimeLines:
+            day_text: "Wednesday"
+    RelativeLayout:
+        TimeLines:
+            day_text: "Thursday"
+    RelativeLayout:
+        TimeLines:
+            day_text: "Friday"
+    RelativeLayout:
+        TimeLines:
+            day_text: "Saturday"
+    RelativeLayout:
+        TimeLines:
+            day_text: "Sunday"
+
+# definition for the rectangle that can be drawn by user by dragging their mouse
+<DragRect>:
+    size_hint: 1, None
+    background_normal: ''
+    background_color: root.rect_color
+    on_release: Factory.ColorMenu(self)
+
+# definition for the a grid-like section to show the hours represented by each line in the day's grid
+# use 24 hours, not am/pm
+<HourLines>:
+    GridLayout:
+        cols: 1
+        rows: 25
+        Label:
+            text: "0"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "1"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "2"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "3"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "4"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "5"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "6"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "7"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "8"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "9"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "10"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "11"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "12"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "13"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "14"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "15"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "16"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "17"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "18"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "19"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "20"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "21"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "22"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "23"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            text: "24"
+            text_size: self.size
+            halign: 'center'
+            valign: 'bottom'
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+
+# definition for each day's grid or time slots
+<TimeLines>:
+    GridLayout:
+        cols: 1
+        rows: 25
+        Label:
+            # to enter the day's name when created a new TimeLines for that day
+            text: root.day_text
+            pos_hint: {'center_x': .5, 'center_y': .98}
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                Line:
+                    points: self.x,self.top,self.right,self.top
+                Line:
+                    points: self.right,self.top,self.right,self.y
